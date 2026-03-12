@@ -1,0 +1,1556 @@
+<!doctype html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network and Connect - MyHeart Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #000000;
+            background: #ffffff;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-image: url('https://myheart.my/wp-content/uploads/2023/02/group-asia-young-creative-people-smart-casual-wear-smiling-thumbs-up-creative-office-workplace-scaled.jpg');
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            margin-top: 65px;
+            padding: 110px 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(34,32,95,0.95) 0%, rgba(204,0,0,0.85) 100%);
+            opacity: 0.92;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1170px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(40px, 8vw, 60px);
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        /* Introduction Section */
+        .intro-section {
+            padding: 80px 20px 40px;
+            max-width: 1170px;
+            margin: 0 auto;
+        }
+
+        .intro-title {
+            font-size: clamp(32px, 6vw, 50px);
+            font-weight: 700;
+            color: #22205F;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .intro-title span {
+            color: #CC0000;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .intro-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #CC0000, #FFD53D);
+            border-radius: 2px;
+        }
+
+        .intro-description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #4a4a4a;
+            max-width: 900px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 1170px;
+            margin: 30px auto 20px;
+            padding: 0 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #CC0000;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 25px 18px 55px;
+            font-size: 16px;
+            border: 2px solid rgba(34,32,95,0.1);
+            border-radius: 60px;
+            background: white;
+            color: #22205F;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #CC0000;
+            box-shadow: 0 15px 40px rgba(204,0,0,0.1);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            display: none;
+            transition: color 0.3s ease;
+        }
+
+        .clear-search:hover {
+            color: #CC0000;
+        }
+
+        .search-input:not(:placeholder-shown) + .clear-search {
+            display: block;
+        }
+
+        /* Modern Tab Buttons */
+        .tab-container {
+            max-width: 1170px;
+            margin: 30px auto 40px;
+            padding: 0 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 14px 32px;
+            border: none;
+            background: white;
+            color: #22205F;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(34,32,95,0.1);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(204,0,0,0.15);
+            border-color: #CC0000;
+            color: #CC0000;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #CC0000, #ff3333);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 25px rgba(204,0,0,0.3);
+        }
+
+        /* Modern Profile Grid */
+        .profiles-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Modern Profile Card */
+        .modern-profile-card {
+            display: flex;
+            flex-direction: row;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 320px;
+            opacity: 0;
+            animation: cardAppear 0.6s ease forwards;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .modern-profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #CC0000, #FFD53D);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+
+        .modern-profile-card:hover::before {
+            opacity: 1;
+        }
+
+        .modern-profile-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(204,0,0,0.3);
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Image Wrapper - Default for professionals/students */
+        .card-image-wrapper {
+            flex: 0 0 220px;
+            position: relative;
+            overflow: hidden;
+            background: #f0f0f0;
+            aspect-ratio: 3/4;
+        }
+
+        /* Association Logo Styling - Square with white background */
+        .modern-profile-card[data-category="association"] .card-image-wrapper {
+            aspect-ratio: 1/1;
+            background: white;
+            padding: 15px;
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .modern-profile-card[data-category="association"] .card-image-wrapper img {
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .modern-profile-card[data-category="association"] .card-image-wrapper::after {
+            display: none;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Gradient overlay only for non-association cards */
+        .modern-profile-card:not([data-category="association"]) .card-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(34,32,95,0.2) 0%, rgba(204,0,0,0.1) 100%);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .modern-profile-card:hover .card-image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .modern-profile-card[data-category="association"]:hover .card-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        /* Card Content */
+        .card-content {
+            flex: 1;
+            padding: 28px;
+            background: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .card-header {
+            margin-bottom: 12px;
+        }
+
+        .card-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #22205F;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .location i {
+            color: #CC0000;
+            font-size: 14px;
+        }
+
+        /* Description Container - Fixed */
+        .description-container {
+            position: relative;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #4a4a4a;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Truncated state - always apply by default */
+        .description.truncated {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            position: relative;
+        }
+
+        /* Gradient fade for truncated text */
+        .description.truncated::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, white);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        /* Expanded state */
+        .description.expanded {
+            display: block;
+            -webkit-line-clamp: unset;
+        }
+
+        .description.expanded::after {
+            display: none;
+        }
+
+        /* Read More button - Always visible if description > 100 chars */
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #CC0000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 0 5px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-top: 5px;
+        }
+
+        .read-more-btn:hover {
+            color: #22205F;
+            gap: 12px;
+        }
+
+        .read-more-btn i {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-link {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(34,32,95,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #22205F;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .social-link:hover {
+            background: #CC0000;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .connect-btn {
+            background: transparent;
+            border: 2px solid #CC0000;
+            color: #CC0000;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .connect-btn:hover {
+            background: #CC0000;
+            color: white;
+            gap: 12px;
+        }
+
+        .connect-btn i {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .connect-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Load More Button */
+        .load-more-container {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .load-more-btn {
+            background: linear-gradient(135deg, #22205F, #2a2a7a);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 15px 30px rgba(34,32,95,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .load-more-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .load-more-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(34,32,95,0.4);
+        }
+
+        .load-more-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .load-more-btn:hover i {
+            transform: translateY(3px);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .load-more-btn.loading .spinner {
+            display: inline-block;
+        }
+
+        .load-more-btn.loading .btn-text {
+            display: none;
+        }
+
+        .load-more-btn.loading i {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Profile Counter */
+        .profile-counter {
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* No Results */
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            background: #f9f9f9;
+            border-radius: 24px;
+            font-size: 16px;
+        }
+
+        .no-results i {
+            font-size: 40px;
+            color: #CC0000;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .no-results p {
+            margin-bottom: 10px;
+        }
+
+        .no-results .suggestion {
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            margin: 80px 20px;
+            padding: 70px 40px;
+            background: linear-gradient(135deg, #ECD5BB, #f5e6d8);
+            border-radius: 40px;
+            max-width: 1170px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-title {
+            font-size: clamp(32px, 6vw, 50px);
+            font-weight: 700;
+            color: #22205F;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #333;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #CC0000, #ff3333);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(204,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(204,0,0,0.4);
+        }
+
+        /* Footer */
+        .modern-footer {
+            background: #22205F;
+            position: relative;
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 80px;
+            overflow: hidden;
+        }
+
+        .modern-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://myheart.my/wp-content/uploads/2023/02/Pattern.png');
+            background-position: center;
+            background-repeat: repeat;
+            background-size: auto;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1170px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #FFD53D;
+        }
+
+        .footer-copyright {
+            opacity: 0.7;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .profile-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .modern-profile-card {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .card-image-wrapper,
+            .modern-profile-card[data-category="association"] .card-image-wrapper {
+                flex: 0 0 240px;
+                width: 100%;
+                aspect-ratio: 16/9;
+            }
+            
+            .card-image-wrapper img {
+                object-position: center 30%;
+            }
+            
+            .description.truncated {
+                -webkit-line-clamp: 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .modern-profile-card {
+                min-height: auto;
+            }
+            
+            .card-image-wrapper,
+            .modern-profile-card[data-category="association"] .card-image-wrapper {
+                flex: 0 0 240px;
+                aspect-ratio: 16/9;
+            }
+            
+            .card-content {
+                padding: 24px;
+            }
+            
+            .card-content h3 {
+                font-size: 24px;
+            }
+            
+            .hero-title {
+                font-size: 40px;
+            }
+            
+            .intro-title {
+                font-size: 30px;
+            }
+            
+            .cta-title {
+                font-size: 30px;
+            }
+            
+            .tab-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            
+            .cta-section {
+                padding: 50px 20px;
+                border-radius: 30px;
+            }
+            
+            .footer-links {
+                gap: 20px;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .description.truncated {
+                -webkit-line-clamp: 2;
+            }
+
+            .search-wrapper {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+            
+            .connect-btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .card-image-wrapper {
+                flex: 0 0 200px;
+            }
+            
+            .read-more-btn {
+                align-self: center;
+            }
+
+            .search-input {
+                padding: 15px 20px 15px 50px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header style="height: 65px; background: white; border-bottom: 1px solid #eee; position: fixed; top: 0; width: 100%; z-index: 1000;"></header>
+
+    <main style="margin-top: 65px;">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Network & Connect</h1>
+            </div>
+        </section>
+
+        <!-- Introduction Section -->
+        <section class="intro-section">
+            <h2 class="intro-title">Join a global network of <span>Malaysian talents</span></h2>
+            <p class="intro-description">Connecting with fellow Malaysians abroad has never been easier. Discover a multitude of Malaysian talents, globally by tapping into the expansive network we have to offer. Foster meaningful partnerships, exchange innovative ideas and contribute to a vibrant global Malaysian community.</p>
+        </section>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name, location, or keywords...">
+                <button class="clear-search" id="clearSearch" onclick="clearSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-filter="all">All (39)</button>
+                <button class="tab-btn" data-filter="professional">Professionals (16)</button>
+                <button class="tab-btn" data-filter="association">Association (18)</button>
+                <button class="tab-btn" data-filter="student">Students (5)</button>
+            </div>
+        </div>
+
+        <!-- Profiles Grid -->
+        <div class="profiles-wrapper">
+            <div class="profile-grid" id="profileGrid"></div>
+            
+            <!-- Counter -->
+            <div class="profile-counter" id="profileCounter"></div>
+            
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <span class="btn-text">Load More Profiles</span>
+                    <span class="spinner"></span>
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2 class="cta-title">Join MyHeart today!</h2>
+            <p class="cta-description">Get started on your journey to connecting with fellow Malaysians around the world!</p>
+            <a href="https://myheart.my/app/user/register" class="cta-button">Join MyHeart</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="modern-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">FAQ</a>
+            </div>
+            <p class="footer-copyright">© 2026 MyHeart. All right reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- JavaScript -->
+    <script>
+        // Profile data from Network & Connect.docx
+        const profiles = [
+            // PROFESSIONALS - Samantha Chong paling atas
+            {
+                name: "Samantha Chong",
+                location: "China",
+                description: "Samantha is a classical opera singer and has performed lead roles in productions all around the world. She has graced stages at the Royal Opera House, La Scala, and the Metropolitan Opera, captivating audiences with her powerful mezzo-soprano voice. Her repertoire includes iconic roles such as Carmen, Rosina in The Barber of Seville, and Cenerentola. Beyond performing, Samantha is passionate about mentoring young opera talents and has conducted masterclasses across Asia and Europe.",
+                image: "https://myheart.my/wp-content/uploads/2023/03/Samantha-Chong.jpg",
+                socialUrl: "https://www.linkedin.com/in/samantha-chong-8172ab20/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Mei Yi Foo",
+                location: "United Kingdom",
+                description: "Mei Yi Foo is a pianist and festival curator, creating inspiring music and arts experiences.",
+                image: "https://myheart.my/wp-content/uploads/2025/08/2014_L1-e1755587864627.jpg",
+                socialUrl: "https://www.linkedin.com/in/mei-yi-foo-22114741/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Dr. Daniel Mahadzir",
+                location: "Singapore",
+                description: "Dr. Daniel Mahadzir is a Malaysian clinical nutritionist specialising in healthy ageing, longevity and metabolic research.",
+                image: "https://myheart.my/wp-content/uploads/2025/12/Dr.-Danial-Mahadzir.jpg",
+                socialUrl: "https://www.linkedin.com/in/dvnielmd/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Hannah Maran",
+                location: "Thailand",
+                description: "Hannah Maran is a Malaysian philanthropy strategist and community connector, specialising in partnerships, fundraising and impact.",
+                image: "https://myheart.my/wp-content/uploads/2025/12/Hannah-Maran.jpg",
+                socialUrl: "https://www.linkedin.com/in/hannahmaran/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Dr. Amy Poh",
+                location: "Japan",
+                description: "Dr. Amy Poh is a researcher and MJVC 2024 Chairperson, specialising in security challenges in digital technologies.",
+                image: "https://myheart.my/wp-content/uploads/2024/06/Dr.-Amy.jpg",
+                socialUrl: "https://www.linkedin.com/in/amy-poh-ai-ling-phd-14554086/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            // Existing professionals from previous code
+            {
+                name: "Dr. Aid Fawzal",
+                location: "United Kingdom",
+                description: "Dr. Aid is an engineer with expertise in EV cooling system. He invented the Fawzal Number used in supercar design. His research focuses on thermal management in electric vehicles and has been published in leading engineering journals.",
+                image: "https://myheart.my/wp-content/uploads/2023/03/1524242424806.jpeg",
+                socialUrl: "https://www.linkedin.com/in/ahmad-syahid-a-fawzal-b229716a/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Dr. Catheryn Lim",
+                location: "United Kingdom",
+                description: "Dr. Catheryn is a researcher who developed genetic and gene therapies for neuromuscular diseases at University of Oxford.",
+                image: "https://myheart.my/wp-content/uploads/2023/03/A0BKkOVq_400x400.jpg",
+                socialUrl: "https://www.linkedin.com/in/catheryn-lim-310b40164/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "KC Cheah",
+                location: "UAE",
+                description: "Cheah has more than three decades of experience as a deal maker in foreign direct investment across Middle East. He has facilitated over $2 billion in cross-border investments and advises governments on economic diversification strategies.",
+                image: "https://myheart.my/wp-content/uploads/2023/03/1679595130597.jpeg",
+                socialUrl: "https://www.linkedin.com/in/cheah-kian-choong/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Dr. Raja Yasmin",
+                location: "Australia",
+                description: "Dr. Raja Yasmin devotes herself to coaching and conducting workshops for female entrepreneurs, imparting her valuable knowledge to those striving for success.",
+                image: "https://myheart.my/wp-content/uploads/2023/04/Dr.-Yasmin-Aussie.jpg",
+                socialUrl: "https://www.linkedin.com/in/dr-yasmin-raja-abdul/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Henry Lee",
+                location: "Canada",
+                description: "Henry has been focusing on building strong business relationships between Canada and Southeast Asia that support new trade and investments.",
+                image: "https://myheart.my/wp-content/uploads/2023/04/Untitled-design-4.png",
+                socialUrl: "https://www.linkedin.com/in/henry-leong-bee-lee-07720618/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Professor Kanes",
+                location: "United Kingdom",
+                description: "Professor Kanes is an entrepreneur and eclectic senior professional Malaysian.",
+                image: "https://myheart.my/wp-content/uploads/2023/04/Prof-Kanes-UK.jpg",
+                socialUrl: "https://www.linkedin.com/in/kanesrajah/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Jo Ann Lim",
+                location: "United Kingdom",
+                description: "Jo Ann is an Enterprise Client Partner at Meta, with over 10 years of experience working in India, Malaysia and South Korea. She specializes in helping businesses leverage digital platforms for growth and has managed portfolios worth over $100 million.",
+                image: "https://myheart.my/wp-content/uploads/2024/02/PHOTO-JO-ANN-2-1426x1536-1-e1707199360177-1024x1024.jpg",
+                socialUrl: "https://www.linkedin.com/in/limjoann/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Lam Ka Jhun",
+                location: "Australia",
+                description: "Ka Jhun guides companies in developing climate strategies by implementing recycling and carbon reduction initiatives.",
+                image: "https://myheart.my/wp-content/uploads/2023/10/KA-JHUN-With-kangaroo-2015-e1718253307471.jpg",
+                socialUrl: "https://www.linkedin.com/in/kjlam/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Mi Mi Hou",
+                location: "Singapore",
+                description: "Mi Mi plays a crucial role in supporting organisations in driving talent strategies for 30,000 employees worldwide.",
+                image: "https://myheart.my/wp-content/uploads/2024/02/Mi-Mi_Singapore.jpg",
+                socialUrl: "https://www.linkedin.com/in/mi-mi-hou/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Hidayah Iwani",
+                location: "United Kingdom",
+                description: "Hidayah is a Legal Technology Solutions Product Specialist at a City Law firm based in London. When not working, she posts food reviews on @hidayahcooks, exploring the diverse culinary scene across the UK. Her reviews have garnered a following of over 50k food enthusiasts, and she's been featured in several food publications. She combines her legal tech expertise with her passion for food by occasionally writing about the intersection of food law and technology.",
+                image: "https://myheart.my/wp-content/uploads/2024/06/Hidayah_1-1024x1009.jpg",
+                socialUrl: "https://www.linkedin.com/in/hidayahiwani/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            {
+                name: "Mohd Firdaus",
+                location: "Germany",
+                description: "Firdaus is a financial leader in the renewable energy sector in Central Europe.",
+                image: "https://myheart.my/wp-content/uploads/2023/10/FIRDAUS-3-e1718253458906.jpeg",
+                socialUrl: "https://www.linkedin.com/in/firdauskamaruddin",
+                socialIcon: "fab fa-linkedin-in",
+                category: "professional"
+            },
+            
+            // ASSOCIATIONS - All with Instagram icons as requested
+            {
+                name: "Warwick Malaysian Students Association (WMSA)",
+                location: "United Kingdom",
+                description: "A cross‑university event celebrating Malaysian identity through arts and community.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/WMSA-Header-Logo.jpeg",
+                socialUrl: "https://www.instagram.com/warwickmsa/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian Students Association in France (MASAF)",
+                location: "France",
+                description: "Festival Seni Malaysia & Malaysian Night unites Malaysian students and international audiences in Paris to celebrate Malaysia's diverse cultural heritage.",
+                image: "https://myheart.my/wp-content/uploads/2024/03/MASAF.png",
+                socialUrl: "https://www.instagram.com/masafrance/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian Student Council of Australia NSW State Chapter",
+                location: "Australia",
+                description: "Representing Malaysian students in New South Wales, fostering community and cultural connections.",
+                image: "https://myheart.my/wp-content/uploads/2024/04/MASCA-NSW.png",
+                socialUrl: "https://www.instagram.com/masca_nsw/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Sydney University Association of Malaysian Students",
+                location: "Australia",
+                description: "Connecting Malaysian students at the University of Sydney through cultural and social events.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Sydney-university-1.jpg",
+                socialUrl: "https://www.instagram.com/usydsuams/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian Students' Council of Australia Victoria Chapter",
+                location: "Australia",
+                description: "Supporting and connecting Malaysian students in Victoria, Australia.",
+                image: "https://myheart.my/wp-content/uploads/2024/03/MASCA-VIC.png",
+                socialUrl: "https://www.instagram.com/masca_victoria/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysia Student Association in Shanghai",
+                location: "China",
+                description: "Bringing together Malaysian students in Shanghai for cultural exchange and community building.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Shanghai.png",
+                socialUrl: "https://www.instagram.com/msashanghai/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Majlis Perundingan Mahasiswa Malaysia Mesir",
+                location: "Egypt",
+                description: "The Malaysian Students' Consultative Council in Egypt, supporting Malaysian students in Cairo.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Majlis-mesir.jpeg",
+                socialUrl: "https://www.instagram.com/official_mp3m/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysisch-Aachener Klub E.V",
+                location: "Germany",
+                description: "Malaysian-German club in Aachen fostering cultural exchange and community.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Aachener-Klub-E.V.jpeg",
+                socialUrl: "https://www.instagram.com/malaysia.aachen/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian German Students' Society",
+                location: "Germany",
+                description: "Connecting Malaysian students across Germany through events and networking.",
+                image: "https://myheart.my/wp-content/uploads/2024/03/MGSS.png",
+                socialUrl: "https://www.instagram.com/mgssofficial/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian Students' Association Japan",
+                location: "Japan",
+                description: "Supporting Malaysian students in Japan and promoting Malaysian culture.",
+                image: "https://myheart.my/wp-content/uploads/2023/12/Logo_MSAJ.png",
+                socialUrl: "https://www.instagram.com/official_msaj/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Persatuan Pelajar Malaysia Korea",
+                location: "Korea",
+                description: "Malaysian Students Association in Korea, fostering community and cultural exchange.",
+                image: "https://myheart.my/wp-content/uploads/2023/12/Logo_PPMK.png",
+                socialUrl: "https://www.instagram.com/ppmkofficial/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "International Council of Malaysian Scholars and Associates",
+                location: "Malaysia",
+                description: "Connecting Malaysian scholars globally through networking and professional development.",
+                image: "https://myheart.my/wp-content/uploads/2024/06/ICMS.jpg",
+                socialUrl: "https://www.instagram.com/icmscholars/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "National University of Singapore Malaysian Students League",
+                location: "Singapore",
+                description: "Malaysian student organization at NUS, fostering community and cultural connections.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/National-University-of-Singapore-Malaysian-Students.jpeg",
+                socialUrl: "https://www.instagram.com/nus.msl/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Sheffield Malaysian Students Association",
+                location: "United Kingdom",
+                description: "Connecting Malaysian students in Sheffield through cultural and social activities.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Logo-SMSA.png",
+                socialUrl: "https://www.instagram.com/smsasheffield/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            {
+                name: "Malaysian Student Society of Manchester",
+                location: "United Kingdom",
+                description: "One of the largest Malaysian student societies in the UK, organizing cultural events and networking opportunities.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Logo-MSSM.png",
+                socialUrl: "https://www.instagram.com/instamssm/?hl=en",
+                socialIcon: "fab fa-instagram",
+                category: "association"
+            },
+            
+            // STUDENTS
+            {
+                name: "Hiu Jack Yuan",
+                location: "United Kingdom",
+                description: "Hiu Jack Yuan leads UKEC initiatives and CEKU's editorial platform to connect and inspire Malaysian students abroad.",
+                image: "https://myheart.my/wp-content/uploads/2025/12/hiu-jack-yuan-myheart-stories-cover-photo.jpg",
+                socialUrl: "https://www.linkedin.com/in/hiu-jack-yuan-b99a3816b/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Ermi Farihin Mohd Fahmi",
+                location: "Ireland",
+                description: "A Data Science student at University College Dublin, Ireland and served as a student leader in UCD Malaysian Society, supporting initiatives and leading efforts to serve the Malaysian community abroad.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Ermi-Farihin.jpeg",
+                socialUrl: "https://www.linkedin.com/in/nur-ermi-farihin-mohd-fahmi-165513371/?originalSubdomain=my",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Rania Mohd Razif",
+                location: "Germany",
+                description: "Rania is in her final year bachelors student at Aachen University of Applied Sciences studying Global Business & Economics. She is also active as Head of Finance for Malaysisch Aachener Klub e.V and works as a student assistant at her university.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Rania-Razif.jpeg",
+                socialUrl: "https://www.linkedin.com/in/rania-razif/ ",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Amirul Haikal Yazid",
+                location: "United Kingdom",
+                description: "Amirul Haikal bin Mohd Yazid is Co-Founder & Chief Investment Officer of Kancil Capital and Executive Councillor at UKEC. A third-year BA (Econ & Data Analytics) at University of Manchester, he leads outreach and industry engagement for JSOUK, building talent pipelines and practical market exposure for Malaysian students in the UK and Ireland.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Amirul-Haikal.jpeg",
+                socialUrl: "https://www.linkedin.com/in/amhaikal/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Tey Yee Siang",
+                location: "Singapore",
+                description: "Yee Siang is a Computer Science student at NUS with a passion for software engineering and AI.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Tey-Yee-Siang.jpeg",
+                socialUrl: "https://www.linkedin.com/in/yee-siang-tey/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Dasmiita Yuki Kumar",
+                location: "Korea",
+                description: "An ocean science advocate committed to combatting climate change in marine ecosystems and empowering youth globally through ocean literacy and awareness.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Dasmitta-Yuki.jpeg",
+                socialUrl: "https://www.linkedin.com/in/dasmiita-yuki-kumar-70147a331/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Shaqeel Hazmi Razifuddin",
+                location: "Canada",
+                description: "Shaqeel is a Computer Science student at the University of Toronto who seeks to strengthen the Malaysian community in North America through the International Council of Malaysian Scholars.",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Shaqeel.jpeg",
+                socialUrl: "https://www.linkedin.com/in/shaqeel-hazmi/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            },
+            {
+                name: "Leong Hoy Kit",
+                location: "United Kingdom",
+                description: "Hoy Kit is dedicated to bridging the gap between employers and students through strategic engagement initiatives",
+                image: "https://myheart.my/wp-content/uploads/2026/03/Leong-Hoy-Kit.jpeg",
+                socialUrl: "https://www.linkedin.com/in/leonghoykit/",
+                socialIcon: "fab fa-linkedin-in",
+                category: "student"
+            }
+        ];
+
+        // State
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+        let visibleCount = 4;
+        let filteredProfiles = profiles;
+        let expandedCards = new Set();
+
+        // DOM Elements
+        const profileGrid = document.getElementById('profileGrid');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const profileCounter = document.getElementById('profileCounter');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+
+        // Filter function with search
+        function filterProfiles(category, searchQuery) {
+            let filtered = profiles;
+            
+            // Apply category filter
+            if (category !== 'all') {
+                filtered = filtered.filter(profile => profile.category === category);
+            }
+            
+            // Apply search filter
+            if (searchQuery && searchQuery.trim() !== '') {
+                const query = searchQuery.toLowerCase().trim();
+                filtered = filtered.filter(profile => {
+                    return profile.name.toLowerCase().includes(query) ||
+                           profile.location.toLowerCase().includes(query) ||
+                           profile.description.toLowerCase().includes(query) ||
+                           profile.category.toLowerCase().includes(query);
+                });
+            }
+            
+            return filtered;
+        }
+
+        // Get category count
+        function getCategoryCount(category) {
+            if (category === 'all') return profiles.length;
+            return profiles.filter(p => p.category === category).length;
+        }
+
+        // Update tab button counts
+        function updateTabCounts() {
+            tabButtons.forEach(btn => {
+                const filter = btn.dataset.filter;
+                const count = getCategoryCount(filter);
+                btn.innerHTML = `${btn.textContent.split('(')[0].trim()} (${count})`;
+            });
+        }
+
+        // Check if description needs truncation
+        function needsTruncation(text) {
+            // Truncate if more than 100 characters OR if it contains multiple sentences
+            return text.length > 100 || text.split('.').length > 2;
+        }
+
+        // Toggle description expansion
+        function toggleDescription(cardId, button) {
+            const desc = document.getElementById(`desc-${cardId}`);
+            
+            if (desc.classList.contains('expanded')) {
+                desc.classList.remove('expanded');
+                desc.classList.add('truncated');
+                button.innerHTML = '<i class="fas fa-chevron-down"></i> Read more';
+                expandedCards.delete(cardId);
+            } else {
+                desc.classList.remove('truncated');
+                desc.classList.add('expanded');
+                button.innerHTML = '<i class="fas fa-chevron-up"></i> Show less';
+                expandedCards.add(cardId);
+            }
+        }
+
+        // Render profiles
+        function renderProfiles() {
+            const profilesToShow = filteredProfiles.slice(0, visibleCount);
+            
+            if (profilesToShow.length === 0) {
+                profileGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>No profiles found matching "${currentSearchQuery}"</p>
+                        <p class="suggestion">Try different keywords or clear search</p>
+                    </div>
+                `;
+                loadMoreBtn.style.display = 'none';
+                profileCounter.textContent = 'Showing 0 profiles';
+                return;
+            }
+
+            profileGrid.innerHTML = profilesToShow.map((profile, index) => {
+                const cardId = `card-${index}-${Date.now()}`;
+                const isExpanded = expandedCards.has(cardId);
+                const truncate = needsTruncation(profile.description);
+                
+                // Determine description classes
+                let descClass = 'description';
+                if (truncate) {
+                    descClass += isExpanded ? ' expanded' : ' truncated';
+                }
+                
+                const readMoreVisible = truncate;
+                const readMoreText = isExpanded ? 'Show less' : 'Read more';
+                const readMoreIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
+                
+                return `
+                <div class="modern-profile-card" data-category="${profile.category}" style="animation-delay: ${index * 0.1}s">
+                    <div class="card-image-wrapper">
+                        <img src="${profile.image}" alt="${profile.name}" loading="lazy" onerror="this.src='https://myheart.my/wp-content/uploads/2023/03/placeholder-profile.jpg'">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>${profile.name}</h3>
+                        </div>
+                        <div class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${profile.location}</span>
+                        </div>
+                        <div class="description-container">
+                            <div id="desc-${cardId}" class="${descClass}">
+                                ${profile.description}
+                            </div>
+                            ${readMoreVisible ? `
+                                <button class="read-more-btn" onclick="toggleDescription('${cardId}', this)">
+                                    <i class="fas ${readMoreIcon}"></i> ${readMoreText}
+                                </button>
+                            ` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <div class="social-links">
+                                <a href="${profile.socialUrl}" class="social-link" target="_blank">
+                                    <i class="${profile.socialIcon}"></i>
+                                </a>
+                            </div>
+                            <a href="${profile.socialUrl}" class="connect-btn" target="_blank">
+                                Connect <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+
+            // Update counter
+            const totalFiltered = filteredProfiles.length;
+            profileCounter.textContent = `Showing ${visibleCount} of ${totalFiltered} profiles`;
+
+            // Show/hide load more button
+            if (visibleCount >= totalFiltered) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'inline-flex';
+            }
+        }
+
+        // Load more function
+        function loadMore() {
+            loadMoreBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                const totalFiltered = filteredProfiles.length;
+                const remaining = totalFiltered - visibleCount;
+                
+                if (remaining > 0) {
+                    visibleCount += Math.min(2, remaining);
+                    renderProfiles();
+                }
+                
+                loadMoreBtn.classList.remove('loading');
+            }, 600);
+        }
+
+        // Reset visible count and render with new filter and search
+        function updateResults() {
+            filteredProfiles = filterProfiles(currentFilter, currentSearchQuery);
+            visibleCount = 4;
+            expandedCards.clear();
+            renderProfiles();
+
+            // Update active tab
+            tabButtons.forEach(btn => {
+                if (btn.dataset.filter === currentFilter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Handle search input
+        function handleSearch() {
+            currentSearchQuery = searchInput.value;
+            updateResults();
+        }
+
+        // Clear search
+        function clearSearch() {
+            searchInput.value = '';
+            currentSearchQuery = '';
+            updateResults();
+            searchInput.focus();
+        }
+
+        // Debounce search to improve performance
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(handleSearch, 300);
+        });
+
+        // Clear search button
+        clearSearchBtn.addEventListener('click', clearSearch);
+
+        // Tab click handlers
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFilter = btn.dataset.filter;
+                // Clear search when changing tabs
+                searchInput.value = '';
+                currentSearchQuery = '';
+                updateResults();
+            });
+        });
+
+        loadMoreBtn.addEventListener('click', loadMore);
+
+        // Make functions global
+        window.toggleDescription = toggleDescription;
+        window.clearSearch = clearSearch;
+
+        // Initial render
+        updateTabCounts();
+        updateResults();
+    </script>
+</body>
+</html>
