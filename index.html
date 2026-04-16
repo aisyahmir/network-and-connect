@@ -1820,12 +1820,15 @@
             }
         ];
 
-        // State
+                        // State
         let currentFilter = 'all';
         let currentSearchQuery = '';
         let visibleCount = 4;
         let filteredProfiles = profiles;
         let expandedCards = new Set();
+        let isLoading = false;          // Untuk prevent multiple loading
+        let hasMoreData = true;         // Untuk track sama ada masih ada data
+        let observer = null;            // Untuk Intersection Observer
 
         const profileGrid = document.getElementById('profileGrid');
         const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -1885,8 +1888,12 @@
             }
         }
 
-        function renderProfiles() {
+        function renderProfiles(resetCards = true) {
             const profilesToShow = filteredProfiles.slice(0, visibleCount);
+            
+            if (resetCards) {
+                expandedCards.clear();
+            }
             
             if (profilesToShow.length === 0) {
                 profileGrid.innerHTML = `
@@ -1898,91 +1905,232 @@
                 `;
                 loadMoreBtn.style.display = 'none';
                 profileCounter.textContent = 'Showing 0 profiles';
+                hasMoreData = false;
+                // Disconnect observer if exists
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
                 return;
             }
 
-            profileGrid.innerHTML = profilesToShow.map((profile, index) => {
-                const cardId = `card-${index}-${Date.now()}`;
-                const isExpanded = expandedCards.has(cardId);
-                const truncate = needsTruncation(profile.description);
+            // Append new profiles instead of replacing all
+            if (!resetCards) {
+                // For loading more, append only new profiles
+                const existingCards = profileGrid.children.length;
+                const newProfiles = profilesToShow.slice(existingCards);
                 
-                let descClass = 'description';
-                if (truncate) {
-                    descClass += isExpanded ? ' expanded' : ' truncated';
+                if (newProfiles.length === 0) {
+                    hasMoreData = false;
+                    loadMoreBtn.style.display = 'none';
+                    // Disconnect observer if no more data
+                    if (observer) {
+                        observer.disconnect();
+                        observer = null;
+                    }
+                    return;
                 }
                 
-                const readMoreVisible = truncate;
-                const readMoreText = isExpanded ? 'Show less' : 'Read more';
-                const readMoreIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
-                
-                return `
-                <div class="modern-profile-card" data-category="${profile.category}" style="animation-delay: ${index * 0.1}s">
-                    <div class="card-image-wrapper">
-                        <img src="${profile.image}" alt="${profile.name}" loading="lazy" onerror="this.src='https://myheart.my/wp-content/uploads/2023/03/placeholder-profile.jpg'">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-header">
-                            <h3>${profile.name}</h3>
+                const newCardsHtml = newProfiles.map((profile, idx) => {
+                    const globalIndex = existingCards + idx;
+                    const cardId = `card-${globalIndex}-${Date.now()}`;
+                    const isExpanded = expandedCards.has(cardId);
+                    const truncate = needsTruncation(profile.description);
+                    
+                    let descClass = 'description';
+                    if (truncate) {
+                        descClass += isExpanded ? ' expanded' : ' truncated';
+                    }
+                    
+                    const readMoreVisible = truncate;
+                    const readMoreText = isExpanded ? 'Show less' : 'Read more';
+                    const readMoreIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
+                    
+                    return `
+                    <div class="modern-profile-card" data-category="${profile.category}" style="animation-delay: ${idx * 0.05}s">
+                        <div class="card-image-wrapper">
+                            <img src="${profile.image}" alt="${profile.name}" loading="lazy" onerror="this.src='https://myheart.my/wp-content/uploads/2023/03/placeholder-profile.jpg'">
                         </div>
-                        <div class="location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>${profile.location}</span>
-                        </div>
-                        <div class="description-container">
-                            <div id="desc-${cardId}" class="${descClass}">
-                                ${profile.description}
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3>${escapeHtml(profile.name)}</h3>
                             </div>
-                            ${readMoreVisible ? `
-                                <button class="read-more-btn" onclick="toggleDescription('${cardId}', this)">
-                                    <i class="fas ${readMoreIcon}"></i> ${readMoreText}
-                                </button>
-                            ` : ''}
-                        </div>
-                        <div class="card-footer">
-                            <div class="social-links">
-                                <a href="${profile.socialUrl}" class="social-link" target="_blank">
-                                    <i class="${profile.socialIcon}"></i>
+                            <div class="location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${escapeHtml(profile.location)}</span>
+                            </div>
+                            <div class="description-container">
+                                <div id="desc-${cardId}" class="${descClass}">
+                                    ${escapeHtml(profile.description)}
+                                </div>
+                                ${readMoreVisible ? `
+                                    <button class="read-more-btn" onclick="toggleDescription('${cardId}', this)">
+                                        <i class="fas ${readMoreIcon}"></i> ${readMoreText}
+                                    </button>
+                                ` : ''}
+                            </div>
+                            <div class="card-footer">
+                                <div class="social-links">
+                                    <a href="${profile.socialUrl}" class="social-link" target="_blank">
+                                        <i class="${profile.socialIcon}"></i>
+                                    </a>
+                                </div>
+                                <a href="${profile.socialUrl}" class="connect-btn" target="_blank">
+                                    Connect <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
-                            <a href="${profile.socialUrl}" class="connect-btn" target="_blank">
-                                Connect <i class="fas fa-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
-                </div>
-            `}).join('');
+                `}).join('');
+                
+                profileGrid.insertAdjacentHTML('beforeend', newCardsHtml);
+            } else {
+                // Reset - render all profiles from start
+                profileGrid.innerHTML = profilesToShow.map((profile, index) => {
+                    const cardId = `card-${index}-${Date.now()}`;
+                    const isExpanded = expandedCards.has(cardId);
+                    const truncate = needsTruncation(profile.description);
+                    
+                    let descClass = 'description';
+                    if (truncate) {
+                        descClass += isExpanded ? ' expanded' : ' truncated';
+                    }
+                    
+                    const readMoreVisible = truncate;
+                    const readMoreText = isExpanded ? 'Show less' : 'Read more';
+                    const readMoreIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
+                    
+                    return `
+                    <div class="modern-profile-card" data-category="${profile.category}" style="animation-delay: ${index * 0.1}s">
+                        <div class="card-image-wrapper">
+                            <img src="${profile.image}" alt="${profile.name}" loading="lazy" onerror="this.src='https://myheart.my/wp-content/uploads/2023/03/placeholder-profile.jpg'">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3>${escapeHtml(profile.name)}</h3>
+                            </div>
+                            <div class="location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${escapeHtml(profile.location)}</span>
+                            </div>
+                            <div class="description-container">
+                                <div id="desc-${cardId}" class="${descClass}">
+                                    ${escapeHtml(profile.description)}
+                                </div>
+                                ${readMoreVisible ? `
+                                    <button class="read-more-btn" onclick="toggleDescription('${cardId}', this)">
+                                        <i class="fas ${readMoreIcon}"></i> ${readMoreText}
+                                    </button>
+                                ` : ''}
+                            </div>
+                            <div class="card-footer">
+                                <div class="social-links">
+                                    <a href="${profile.socialUrl}" class="social-link" target="_blank">
+                                        <i class="${profile.socialIcon}"></i>
+                                    </a>
+                                </div>
+                                <a href="${profile.socialUrl}" class="connect-btn" target="_blank">
+                                    Connect <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            }
 
             const totalFiltered = filteredProfiles.length;
-            profileCounter.textContent = `Showing ${visibleCount} of ${totalFiltered} profiles`;
+            const currentVisible = document.querySelectorAll('.modern-profile-card').length;
+            profileCounter.textContent = `Showing ${currentVisible} of ${totalFiltered} profiles`;
 
-            if (visibleCount >= totalFiltered) {
-                loadMoreBtn.style.display = 'none';
-            } else {
+            // Update hasMoreData
+            hasMoreData = currentVisible < totalFiltered;
+            
+            if (hasMoreData) {
                 loadMoreBtn.style.display = 'inline-flex';
+                const btnText = loadMoreBtn.querySelector('.btn-text');
+                if (btnText) btnText.textContent = 'Load More Profiles';
+                
+                // Setup Intersection Observer untuk button
+                setupObserver();
+            } else {
+                loadMoreBtn.style.display = 'none';
+                // Disconnect observer if no more data
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
             }
+        }
+        
+        // Helper function to escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function loadMore() {
+            if (isLoading) return;
+            if (!hasMoreData) return;
+            
+            isLoading = true;
             loadMoreBtn.classList.add('loading');
             
+            // Simulate loading delay for smooth experience
             setTimeout(() => {
                 const totalFiltered = filteredProfiles.length;
-                const remaining = totalFiltered - visibleCount;
+                const currentVisible = document.querySelectorAll('.modern-profile-card').length;
+                const remaining = totalFiltered - currentVisible;
                 
                 if (remaining > 0) {
-                    visibleCount += Math.min(2, remaining);
-                    renderProfiles();
+                    // Load 2-4 profiles at a time for smooth loading
+                    const loadAmount = Math.min(4, remaining);
+                    visibleCount = currentVisible + loadAmount;
+                    renderProfiles(false); // false = append mode
                 }
                 
+                isLoading = false;
                 loadMoreBtn.classList.remove('loading');
-            }, 600);
+                
+            }, 300);
+        }
+
+        // Setup Intersection Observer - trigger bila button nampak di viewport
+        function setupObserver() {
+            // Disconnect existing observer first
+            if (observer) {
+                observer.disconnect();
+                observer = null;
+            }
+            
+            // Create new observer
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Bila button nampak dalam viewport, auto-load
+                    if (entry.isIntersecting && !isLoading && hasMoreData) {
+                        console.log('Button visible - loading more profiles');
+                        loadMore();
+                    }
+                });
+            }, {
+                threshold: 0.1,  // Trigger bila 10% button kelihatan
+                rootMargin: '0px 0px 50px 0px' // Optional: trigger lebih awal (50px sebelum button masuk viewport)
+            });
+            
+            // Start observing the button
+            if (loadMoreBtn) {
+                observer.observe(loadMoreBtn);
+            }
         }
 
         function updateResults() {
             filteredProfiles = filterProfiles(currentFilter, currentSearchQuery);
-            visibleCount = 4;
-            expandedCards.clear();
-            renderProfiles();
+            visibleCount = 4;  // Reset to initial count
+            hasMoreData = true;
+            renderProfiles(true); // true = reset mode
+            
+            // Reset scroll position to top when filter/search changes
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             tabButtons.forEach(btn => {
                 if (btn.dataset.filter === currentFilter) {
@@ -2005,6 +2153,7 @@
             searchInput.focus();
         }
 
+        // Event listeners
         let searchTimeout;
         searchInput.addEventListener('input', () => {
             clearTimeout(searchTimeout);
@@ -2022,11 +2171,14 @@
             });
         });
 
+        // Keep click event for button as fallback (manual click still works)
         loadMoreBtn.addEventListener('click', loadMore);
 
+        // Make functions global for onclick handlers
         window.toggleDescription = toggleDescription;
         window.clearSearch = clearSearch;
 
+        // Initialize
         updateResults();
 
         // Newsletter form demo
